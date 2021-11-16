@@ -1,0 +1,15 @@
+name: Build executable
+
+jobs:
+  build:
+    name: Build executable
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - name: Install PyOxidizer
+        run: cargo install pyoxidizer
+      - name: Run PyOxidizer
+        run: pyoxidizer build --release
