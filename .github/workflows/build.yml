@@ -15,11 +15,11 @@ jobs:
       matrix:
         config:
         - {
-            name: "Ubuntu Linux"
+            name: "Ubuntu Linux",
             os: ubuntu-latest
           }
         - {
-            name: "macOS"
+            name: "macOS",
             os: macos-latest"
           }
 
