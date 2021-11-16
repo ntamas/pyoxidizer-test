@@ -34,6 +34,9 @@ jobs:
         uses: actions/cache@v2
         with:
           key: v1-PyOxidizer-${{ runner.os }}-${{ env.PYOXIDIZER_VERSION }}
+          path:
+            - .cargo
+            - .cache/pyoxidizer
 
       - name: Install PyOxidizer
         run: cargo install --version=${{ env.PYOXIDIZER_VERSION }} pyoxidizer
