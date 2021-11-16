@@ -1,5 +1,7 @@
 name: Build executable
 
+on: push
+
 jobs:
   build:
     name: Build executable
