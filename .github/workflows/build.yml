@@ -17,17 +17,17 @@ jobs:
         - {
             name: "Ubuntu Linux",
             os: ubuntu-latest,
-            pyoxidizer_cache_dir: "~/.cache/pyoxidizer",
+            pyoxidizer_cache_dir: "${{ env.HOME }}/.cache/pyoxidizer",
           }
         - {
             name: "macOS",
             os: macos-latest,
-            pyoxidizer_cache_dir: "~/.cache/pyoxidizer",
+            pyoxidizer_cache_dir: "${{ env.HOME }}/.cache/pyoxidizer",
           }
         - {
             name: "Windows",
             os: windows-latest,
-            pyoxidizer_cache_dir: "~/.cache/pyoxidizer",
+            pyoxidizer_cache_dir: "${{ env.HOME }}/.cache/pyoxidizer",
           }
 
     steps:
