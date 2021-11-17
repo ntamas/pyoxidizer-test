@@ -52,7 +52,7 @@ jobs:
           if [ ! -d ${PYOXIDIZER_CACHE_DIR} ]; then
             mkdir -p ${PYOXIDIZER_CACHE_DIR}
           fi
-          mkdir pyoxidizer build --release
+          pyoxidizer build --release
 
       - name: Strip executable
         run: strip build/**/release/install/*
