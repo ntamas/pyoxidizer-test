@@ -20,7 +20,7 @@ jobs:
           }
         - {
             name: "macOS",
-            os: macos-latest"
+            os: macos-latest
           }
 
     steps:
@@ -30,17 +30,13 @@ jobs:
         with:
           toolchain: stable
 
-      - name: Restore packages from cargo
+      - name: Restore cache
         uses: actions/cache@v2
         with:
-          key: v1-cargo-${{ runner.os }}-${{ env.PYOXIDIZER_VERSION }}
-          path: ~/.cargo
-
-      - name: Restore PyOxidizer cache
-        uses: actions/cache@v2
-        with:
-          key: v1-PyOxidizer-${{ runner.os }}-${{ env.PYOXIDIZER_VERSION }}
-          path: ~/.cache/pyoxidizer
+          key: v2-PyOxidizer-${{ runner.os }}-${{ env.PYOXIDIZER_VERSION }}
+          path: |
+            ~/.cargo
+            ~/.cache/pyoxidizer
 
       - name: Install PyOxidizer
         run: cargo install --version=${{ env.PYOXIDIZER_VERSION }} pyoxidizer
