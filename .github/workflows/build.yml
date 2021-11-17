@@ -47,12 +47,7 @@ jobs:
 
       - name: Run PyOxidizer
         shell: bash
-        env:
-          PYOXIDIZER_CACHE_DIR: ${{ env.HOME }}/.cache/pyoxidizer
         run: |
-          if [ ! -d ${PYOXIDIZER_CACHE_DIR} ]; then
-            mkdir -p ${PYOXIDIZER_CACHE_DIR}
-          fi
           pyoxidizer build --release
 
       - name: Strip executable
