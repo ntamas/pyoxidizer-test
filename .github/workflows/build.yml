@@ -8,6 +8,7 @@ jobs:
     runs-on: ${{ matrix.config.os }}
 
     env:
+      PYOXIDIZER_CACHE_DIR: ~/.cache/pyoxidizer
       PYOXIDIZER_VERSION: "0.19.0"
 
     strategy:
@@ -21,6 +22,10 @@ jobs:
         - {
             name: "macOS",
             os: macos-latest
+          }
+        - {
+            name: "Windows",
+            os: windows-latest
           }
 
     steps:
@@ -42,10 +47,19 @@ jobs:
         run: cargo install --version=${{ env.PYOXIDIZER_VERSION }} pyoxidizer
 
       - name: Run PyOxidizer
-        run: pyoxidizer build --release
+        shell: bash
+        run: |
+          if [ ! -d ${PYOXIDIZER_CACHE_DIR} ]; then
+            mkdir -p ${PYOXIDIZER_CACHE_DIR}
+          fi
+          mkdir pyoxidizer build --release
+
+      - name: Strip executable
+        run: strip build/**/release/install/*
+        if: matrix.os != 'windows-latest'
 
       - uses: actions/upload-artifact@v2
         with:
-          name: binary for ${{ matrix.os }}
+          name: binaries
           path: ./build/**/release/install/*
 

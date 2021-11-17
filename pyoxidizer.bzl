@@ -30,8 +30,8 @@ def make_exe():
     # Control whether to generate Python bytecode at various optimization
     # levels. The default optimization level used by Python is 0.
     # policy.bytecode_optimize_level_zero = True
-    # policy.bytecode_optimize_level_one = True
-    # policy.bytecode_optimize_level_two = True
+    # policy.bytecode_optimize_level_one = False
+    # policy.bytecode_optimize_level_two = False
 
     # Package all available Python extensions in the distribution.
     # policy.extension_module_filter = "all"
@@ -75,10 +75,10 @@ def make_exe():
 
     # Controls the `add_include` attribute of `PythonModuleSource` not in
     # the standard library.
-    # policy.include_non_distribution_sources = True
+    policy.include_non_distribution_sources = False
 
     # Toggle whether files associated with tests are included.
-    # policy.include_test = False
+    policy.include_test = False
 
     # Resources are loaded from "in-memory" or "filesystem-relative" paths.
     # The locations to attempt to add resources to are defined by the
@@ -193,10 +193,10 @@ def make_exe():
     # python_config.run_command = "<code>"
 
     # Run a Python module as __main__ when the interpreter starts.
-    # python_config.run_module = "<module>"
+    python_config.run_module = "script"
 
     # Run a Python file when the interpreter starts.
-    python_config.run_filename = "script.py"
+    # python_config.run_filename = "script.py"
 
     # Produce a PythonExecutable from a Python distribution, embedded
     # resources, and other options. The returned object represents the
@@ -254,10 +254,7 @@ def make_exe():
     # Read Python files from a local directory and add them to our embedded
     # context, taking just the resources belonging to the `foo` and `bar`
     # Python packages.
-    #exe.add_python_resources(exe.read_package_root(
-    #    path="/src/mypackage",
-    #    packages=["foo", "bar"],
-    #))
+    exe.add_python_resources(exe.read_package_root("src", ["script"]))
 
     # Discover Python files from a virtualenv and add them to our embedded
     # context.
