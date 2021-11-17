@@ -17,17 +17,14 @@ jobs:
         - {
             name: "Ubuntu Linux",
             os: ubuntu-latest,
-            pyoxidizer_cache_dir: "${{ env.HOME }}/.cache/pyoxidizer",
           }
         - {
             name: "macOS",
             os: macos-latest,
-            pyoxidizer_cache_dir: "${{ env.HOME }}/.cache/pyoxidizer",
           }
         - {
             name: "Windows",
             os: windows-latest,
-            pyoxidizer_cache_dir: "${{ env.HOME }}/.cache/pyoxidizer",
           }
 
     steps:
@@ -51,7 +48,7 @@ jobs:
       - name: Run PyOxidizer
         shell: bash
         env:
-          PYOXIDIZER_CACHE_DIR: ${{ matrix.config.pyoxidizer_cache_dir }}
+          PYOXIDIZER_CACHE_DIR: ${{ env.HOME }}/.cache/pyoxidizer
         run: |
           if [ ! -d ${PYOXIDIZER_CACHE_DIR} ]; then
             mkdir -p ${PYOXIDIZER_CACHE_DIR}
