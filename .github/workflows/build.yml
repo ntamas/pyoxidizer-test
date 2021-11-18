@@ -17,6 +17,7 @@ jobs:
         - {
             name: "Ubuntu Linux",
             os: ubuntu-latest,
+            pyoxidizer-build-target: install
             pyoxidizer-platform: x86_64-unknown-linux-gnu,
             target: pyoxidizer-test,
             strip: true,
@@ -24,6 +25,7 @@ jobs:
         - {
             name: "macOS",
             os: macos-latest,
+            pyoxidizer-build-target: install
             pyoxidizer-platform: x86_64-apple-darwin,
             target: pyoxidizer-test,
             strip: true,
@@ -31,6 +33,7 @@ jobs:
         - {
             name: "Windows",
             os: windows-latest,
+            pyoxidizer-build-target: msi_installer
             pyoxidizer-platform: x86_64-pc-windows-msvc,
             target: pyoxidizer-test.exe,
             strip: false,
@@ -57,12 +60,11 @@ jobs:
       - name: Run PyOxidizer
         shell: bash
         run: |
-          pyoxidizer build --release
+          pyoxidizer build --release ${{ matrix.config.pyoxidizer-build-target }}
 
       - name: Strip and compress executable
         uses: svenstaro/upx-action@v2
         with:
-          version: latest
           args: -9 -q
           file: build/${{ matrix.config.pyoxidizer-platform }}/release/install/${{ matrix.config.target }}
           strip: ${{ matrix.config.strip }}
