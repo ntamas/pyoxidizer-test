@@ -17,19 +17,19 @@ jobs:
         - {
             name: "Ubuntu Linux",
             os: ubuntu-latest,
-            target: pyoxidizer-test
+            target: pyoxidizer-test,
             strip: true,
           }
         - {
             name: "macOS",
             os: macos-latest,
-            target: pyoxidizer-test
+            target: pyoxidizer-test,
             strip: true,
           }
         - {
             name: "Windows",
             os: windows-latest,
-            target: pyoxidizer-test.exe
+            target: pyoxidizer-test.exe,
             strip: false,
           }
 
