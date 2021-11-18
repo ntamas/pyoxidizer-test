@@ -17,18 +17,21 @@ jobs:
         - {
             name: "Ubuntu Linux",
             os: ubuntu-latest,
+            pyoxidizer-platform: x86_64-unknown-linux-gnu,
             target: pyoxidizer-test,
             strip: true,
           }
         - {
             name: "macOS",
             os: macos-latest,
+            pyoxidizer-platform: x86_64-apple-darwin,
             target: pyoxidizer-test,
             strip: true,
           }
         - {
             name: "Windows",
             os: windows-latest,
+            pyoxidizer-platform: x86_64-pc-windows-msvc,
             target: pyoxidizer-test.exe,
             strip: false,
           }
@@ -61,7 +64,7 @@ jobs:
         with:
           version: latest
           args: -9 -q
-          file: build/**/release/install/${{ matrix.config.target }}
+          file: build/${{ matrix.config.pyoxidizer-platform }}/release/install/${{ matrix.config.target }}
           strip: ${{ matrix.config.strip }}
 
       - uses: actions/upload-artifact@v2
