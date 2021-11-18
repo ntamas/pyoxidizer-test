@@ -60,9 +60,8 @@ jobs:
         uses: svenstaro/upx-action@v1
         with:
           version: latest
-          file: ./build/**/release/install/*
           args: -9 -q
-          file: build/**/release/install/pyoxidizer-test${{ matrix.config.target }}
+          file: build/**/release/install/${{ matrix.config.target }}
           strip: ${{ matrix.config.strip }}
 
       - uses: actions/upload-artifact@v2
