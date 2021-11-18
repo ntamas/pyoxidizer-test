@@ -17,14 +17,20 @@ jobs:
         - {
             name: "Ubuntu Linux",
             os: ubuntu-latest,
+            target: pyoxidizer-test
+            strip: true,
           }
         - {
             name: "macOS",
             os: macos-latest,
+            target: pyoxidizer-test
+            strip: true,
           }
         - {
             name: "Windows",
             os: windows-latest,
+            target: pyoxidizer-test.exe
+            strip: false,
           }
 
     steps:
@@ -50,16 +56,14 @@ jobs:
         run: |
           pyoxidizer build --release
 
-      - name: Strip executable
-        run: strip build/**/release/install/*
-        if: matrix.config.os != 'windows-latest'
-
-      - name: Compress executable
-        uses: crazy-max/ghaction-upx@v1
+      - name: Strip and compress executable
+        uses: svenstaro/upx-action@v1
         with:
           version: latest
-          files: ./build/**/release/install/*
+          file: ./build/**/release/install/*
           args: -9 -q
+          file: build/**/release/install/pyoxidizer-test${{ matrix.config.target }}
+          strip: ${{ matrix.config.strip }}
 
       - uses: actions/upload-artifact@v2
         with:
