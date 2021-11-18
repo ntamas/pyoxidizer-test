@@ -46,7 +46,7 @@ jobs:
       - name: Restore cache
         uses: actions/cache@v2
         with:
-          key: v3-PyOxidizer-${{ runner.os }}-${{ env.PYOXIDIZER_VERSION }}
+          key: v4-PyOxidizer-${{ runner.os }}-${{ env.PYOXIDIZER_VERSION }}
           path: |
             ~/.cargo
             ~/.cache/pyoxidizer
