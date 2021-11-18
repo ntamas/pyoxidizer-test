@@ -57,7 +57,7 @@ jobs:
           pyoxidizer build --release
 
       - name: Strip and compress executable
-        uses: svenstaro/upx-action@v1
+        uses: svenstaro/upx-action@v2
         with:
           version: latest
           args: -9 -q
