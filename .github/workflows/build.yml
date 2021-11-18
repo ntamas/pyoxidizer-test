@@ -47,6 +47,7 @@ jobs:
 
       - uses: actions-rs/toolchain@v1
         with:
+          profile: minimal
           toolchain: stable
 
       - name: Restore cache
@@ -60,7 +61,6 @@ jobs:
 
       - name: Install PyOxidizer
         run: cargo install --version=${{ env.PYOXIDIZER_VERSION }} pyoxidizer
-        if: steps.restore-cache.outputs.cache-hit != 'true'
 
       - name: Run PyOxidizer
         shell: bash
