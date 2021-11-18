@@ -54,6 +54,13 @@ jobs:
         run: strip build/**/release/install/*
         if: matrix.config.os != 'windows-latest'
 
+      - name: Compress executable
+        uses: crazy-max/ghaction-upx@v1
+        with:
+          version: latest
+          files: ./build/**/release/install/*
+          args: -9 -q
+
       - uses: actions/upload-artifact@v2
         with:
           name: binaries
