@@ -70,7 +70,7 @@ jobs:
       - name: Run PyOxidizer
         shell: bash
         run: |
-          pyoxidizer build --release ${{ matrix.config.pyoxidizer-build-target }} --var ${{ env.APP_VERSION }}
+          pyoxidizer build --release --var VERSION ${{ env.APP_VERSION }} ${{ matrix.config.pyoxidizer-build-target }}
 
       - name: Strip and compress executable
         uses: svenstaro/upx-action@v2
