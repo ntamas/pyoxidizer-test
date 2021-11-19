@@ -8,6 +8,8 @@ jobs:
     runs-on: ${{ matrix.config.os }}
 
     env:
+      APP_EXECUTABLE_NAME: pyoxidizer-test
+      APP_VERSION: "0.1.0"
       PYOXIDIZER_VERSION: "0.19.0"
 
     strategy:
@@ -17,28 +19,31 @@ jobs:
         - {
             name: "Ubuntu Linux",
             os: ubuntu-latest,
+            platform: linux,
             pyoxidizer-build-target: install,
             pyoxidizer-platform: x86_64-unknown-linux-gnu,
-            target: pyoxidizer-test,
+            target: ${{ env.APP_EXECUTABLE_NAME }},
             compress: true,
             strip: true,
           }
         - {
             name: "macOS",
             os: macos-latest,
+            platform: macos,
             pyoxidizer-build-target: install,
             pyoxidizer-platform: x86_64-apple-darwin,
-            target: pyoxidizer-test,
+            target: ${{ env.APP_EXECUTABLE_NAME }},
             compress: true,
             strip: true,
           }
         - {
             name: "Windows",
             os: windows-latest,
-            pyoxidizer-build-target: msi_installer,
+            platform: win64,
+            pyoxidizer-build-target: install,
             pyoxidizer-platform: x86_64-pc-windows-msvc,
-            target: pyoxidizer-test.exe,
-            compress: false,
+            target: ${{ env.APP_EXECUTABLE_NAME }}.exe,
+            compress: true,
             strip: false,
           }
 
@@ -65,7 +70,7 @@ jobs:
       - name: Run PyOxidizer
         shell: bash
         run: |
-          pyoxidizer build --release ${{ matrix.config.pyoxidizer-build-target }}
+          pyoxidizer build --release ${{ matrix.config.pyoxidizer-build-target }} --var ${{ env.APP_VERSION }}
 
       - name: Strip and compress executable
         uses: svenstaro/upx-action@v2
@@ -75,8 +80,16 @@ jobs:
           file: build/${{ matrix.config.pyoxidizer-platform }}/release/${{ matrix.config.pyoxidizer-build-target }}/${{ matrix.config.target }}
           strip: ${{ matrix.config.strip }}
 
+      - name: Create zipped bundle
+        shell: bash
+        run: |
+          mkdir -p dist/${{ matrix.config.platform }}
+          mv build/${{ matrix.config.pyoxidizer-platform }}/release/${{ matrix.config.pyoxidizer-build-target }} dist/${{ matrix.config.platform }}/${{ env.APP_EXECUTABLE_NAME }}-${{ env.APP_VERSION }}
+          cd dist/${{ matrix.config.platform }}
+          zip -r ${{ env.APP_EXECUTABLE_NAME }}-${{ env.APP_VERSION }}.zip ${{ env.APP_EXECUTABLE_NAME }}-${{ env.APP_VERSION }}
+
       - uses: actions/upload-artifact@v2
         with:
           name: binaries
-          path: ./build/**/release/${{ matrix.config.pyoxidizer-build-target }}/*
+          path: ./dist/*
 

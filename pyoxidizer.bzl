@@ -281,18 +281,22 @@ def make_install(exe):
     return files
 
 def make_msi(exe):
+    version = VARS.get("VERSION")
+    if not version:
+        version = prompt_input("version number")
+
     # See the full docs for more. But this will convert your Python executable
     # into a `WiXMSIBuilder` Starlark type, which will be converted to a Windows
     # .msi installer when it is built.
     return exe.to_wix_msi_builder(
         # Simple identifier of your app.
-        "myapp",
+        "pyoxidizer-test-app",
         # The name of your application.
-        "My Application",
+        "PyOxidizer Test App",
         # The version of your application.
-        "1.0",
+        version,
         # The author/manufacturer of your application.
-        "Alice Jones"
+        "Tamas Nepusz"
     )
 
 
