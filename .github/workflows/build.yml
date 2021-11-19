@@ -66,9 +66,6 @@ jobs:
             ~/.cargo
             ~/.cache/pyoxidizer
 
-      - name: Install zip
-        uses: montudor/action-zip@v1
-
       - name: Install PyOxidizer
         run: cargo install --version=${{ env.PYOXIDIZER_VERSION }} pyoxidizer
 
