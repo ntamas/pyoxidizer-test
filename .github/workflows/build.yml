@@ -10,6 +10,7 @@ jobs:
     env:
       APP_EXECUTABLE_NAME: pyoxidizer-test
       APP_VERSION: "0.1.0"
+      PYOXIDIZER_SYSTEM_RUST: "1"
       PYOXIDIZER_VERSION: "0.19.0"
 
     strategy:
@@ -50,7 +51,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: actions-rs/toolchain@v1
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
         with:
           profile: minimal
           toolchain: stable
@@ -63,6 +65,9 @@ jobs:
           path: |
             ~/.cargo
             ~/.cache/pyoxidizer
+
+      - name: Install zip
+        uses: montudor/action-zip@v1
 
       - name: Install PyOxidizer
         run: cargo install --version=${{ env.PYOXIDIZER_VERSION }} pyoxidizer
@@ -86,9 +91,10 @@ jobs:
           mkdir -p dist/${{ matrix.config.platform }}
           mv build/${{ matrix.config.pyoxidizer-platform }}/release/${{ matrix.config.pyoxidizer-build-target }} dist/${{ matrix.config.platform }}/${{ env.APP_EXECUTABLE_NAME }}-${{ env.APP_VERSION }}
           cd dist/${{ matrix.config.platform }}
-          zip -r ${{ env.APP_EXECUTABLE_NAME }}-${{ env.APP_VERSION }}.zip ${{ env.APP_EXECUTABLE_NAME }}-${{ env.APP_VERSION }}
+          zip -qq -r ${{ env.APP_EXECUTABLE_NAME }}-${{ env.APP_VERSION }}.zip ${{ env.APP_EXECUTABLE_NAME }}-${{ env.APP_VERSION }}
 
-      - uses: actions/upload-artifact@v2
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
         with:
           name: binaries
           path: ./dist/*
