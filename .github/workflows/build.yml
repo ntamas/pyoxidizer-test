@@ -85,17 +85,25 @@ jobs:
           file: build/${{ matrix.config.pyoxidizer-platform }}/release/${{ matrix.config.pyoxidizer-build-target }}/${{ env.APP_EXECUTABLE_NAME }}${{ matrix.config.extension }}
           strip: ${{ matrix.config.strip }}
 
-      - name: Create zipped bundle
+      - name: Arrange contents of zipped bundle
         shell: bash
         run: |
-          mkdir -p dist/${{ matrix.config.platform }}
-          mv build/${{ matrix.config.pyoxidizer-platform }}/release/${{ matrix.config.pyoxidizer-build-target }} dist/${{ matrix.config.platform }}/${{ env.APP_EXECUTABLE_NAME }}-${{ env.APP_VERSION }}
-          cd dist/${{ matrix.config.platform }}
-          zip -qq -r ${{ env.APP_EXECUTABLE_NAME }}-${{ env.APP_VERSION }}.zip ${{ env.APP_EXECUTABLE_NAME }}-${{ env.APP_VERSION }}
+          mkdir -p dist
+          mv build/${{ matrix.config.pyoxidizer-platform }}/release/${{ matrix.config.pyoxidizer-build-target }} dist/${{ env.APP_EXECUTABLE_NAME }}-${{ env.APP_VERSION }}_${{ matrix.config.platform }}
+
+      - name: Create zipped bundle
+        uses: thedoctor0/zip-release@master
+        with:
+          type: zip
+          directory: dist
+          filename: ${{ env.APP_EXECUTABLE_NAME }}-${{ env.APP_VERSION }}_${{ matrix.config.platform }}.zip
+          path: ${{ env.APP_EXECUTABLE_NAME }}-${{ env.APP_VERSION }}_${{ matrix.config.platform }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
           name: binaries
-          path: ./dist/*
+          path: |
+            ./dist/*.zip
+            ./dist/*.tar.gz
 
