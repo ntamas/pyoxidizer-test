@@ -3,6 +3,12 @@
 # https://pyoxidizer.readthedocs.io/en/stable/ for details of this
 # configuration file format.
 
+def resource_callback(policy, resource):
+    if type(resource) == "PythonPackageDistributionResource":
+        if resource.name == "RECORD":
+            resource.add_include = False
+
+
 # Configuration files consist of functions which define build "targets."
 # This function creates a Python executable and installs it in a destination
 # directory.
@@ -28,10 +34,11 @@ def make_exe():
     # policy.allow_in_memory_shared_library_loading = True
 
     # Control whether to generate Python bytecode at various optimization
-    # levels. The default optimization level used by Python is 0.
-    # policy.bytecode_optimize_level_zero = True
-    # policy.bytecode_optimize_level_one = False
-    # policy.bytecode_optimize_level_two = False
+    # levels. The default optimization level used by Python is 0. We need
+    # at least level two to get rid of docstrings.
+    policy.bytecode_optimize_level_zero = False
+    policy.bytecode_optimize_level_one = False
+    policy.bytecode_optimize_level_two = True
 
     # Package all available Python extensions in the distribution.
     # policy.extension_module_filter = "all"
@@ -64,7 +71,7 @@ def make_exe():
 
     # Toggle whether Python module source code for modules in the Python
     # distribution's standard library are included.
-    # policy.include_distribution_sources = False
+    policy.include_distribution_sources = True
 
     # Toggle whether Python package resource files for the Python standard
     # library are included.
@@ -111,6 +118,8 @@ def make_exe():
     # to classify files as specific types.
     # policy.set_resource_handling_mode("files")
 
+    policy.register_resource_callback(resource_callback)
+
     # This variable defines the configuration of the embedded Python
     # interpreter. By default, the interpreter will run a Python REPL
     # using settings that are appropriate for an "isolated" run-time
@@ -120,6 +129,8 @@ def make_exe():
     # by setting attributes on the instance. Some of these are
     # documented below.
     python_config = dist.make_python_interpreter_config()
+    python_config.optimization_level = 2
+    python_config.config_profile = "isolated"
 
     # Make the embedded interpreter behave like a `python` process.
     # python_config.config_profile = "python"
@@ -193,7 +204,7 @@ def make_exe():
     # python_config.run_command = "<code>"
 
     # Run a Python module as __main__ when the interpreter starts.
-    python_config.run_module = "script"
+    python_config.run_module = "rich"
 
     # Run a Python file when the interpreter starts.
     # python_config.run_filename = "script.py"
@@ -254,7 +265,7 @@ def make_exe():
     # Read Python files from a local directory and add them to our embedded
     # context, taking just the resources belonging to the `foo` and `bar`
     # Python packages.
-    exe.add_python_resources(exe.read_package_root("src", ["script"]))
+    # exe.add_python_resources(exe.read_package_root("src", ["script"]))
 
     # Discover Python files from a virtualenv and add them to our embedded
     # context.
