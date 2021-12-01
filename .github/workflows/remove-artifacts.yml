@@ -1,0 +1,21 @@
+name: Remove ALL artifacts
+
+on:
+  workflow_dispatch:
+    inputs:
+      age:
+        description: 'Minimum age of artifacts to remove'
+        required: true
+        default: '30 days'
+
+jobs:
+  remove-all-artifacts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+    - name: Remove ALL artifacts
+      uses: c-hive/gha-remove-artifacts@v1
+      with:
+        age: ${{ github.event.inputs.age }}
+
